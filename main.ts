@@ -39,6 +39,11 @@ export default class QuickWrapperPlugin extends Plugin {
             await this.loadSettings();
             this.addSettingTab(new QuickWrapperSettingsTab(this.app, this));
             this.refreshCommands();
+            
+            // Use layout-change event instead of custom event
+            this.registerEvent(
+                this.app.workspace.on('layout-change', () => this.refreshCommands())
+            );
         } catch (error) {
             console.error('Failed to load Quick Wrapper plugin:', error);
         }
@@ -57,13 +62,18 @@ export default class QuickWrapperPlugin extends Plugin {
     }
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-	}
+        this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+    }
 
 	async saveSettings() {
-		await this.saveData(this.settings);
-		this.refreshCommands();
-	}
+        await this.saveData(this.settings);
+        this.refreshCommands();
+        this.emitSettingsChanged();
+    }
+
+    public emitSettingsChanged() {
+        this.app.workspace.trigger('layout-change');
+    }
 
     refreshCommands() {
         try {
@@ -107,10 +117,16 @@ export default class QuickWrapperPlugin extends Plugin {
                     console.error(`Failed to add command ${commandID}:`, err);
                 }
             });
+
+            // Force update of command palette
+            obsidian.commands.commands = { ...obsidian.commands.commands };
         } catch (error) {
             console.error('Failed to refresh commands:', error);
         }
     }
+
+    // Remove the event cleanup from onunload as Obsidian handles it
+    async onunload() {}
 }
 
 class QuickWrapperSettingsTab extends PluginSettingTab {
@@ -178,7 +194,8 @@ class QuickWrapperSettingsTab extends PluginSettingTab {
 						suffix: ''
 					});
 					await this.plugin.saveSettings();
-					this.display();
+                    this.plugin.emitSettingsChanged();
+                    this.display();
 				}));
 	}
 }
