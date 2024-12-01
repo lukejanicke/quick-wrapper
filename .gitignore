@@ -1,0 +1,9 @@
+# NPM
+node_modules
+
+# Obsidian
+main.js
+data.json
+
+# macOS
+.DS_Store

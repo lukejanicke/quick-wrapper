@@ -1,0 +1,14 @@
+{
+	"id": "quick-wrapper",
+	"name": "Quick Wrapper",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Quickly wrap selected text with customisable tags using keyboard shortcuts.",
+	"author": "Luke Janicke",
+	"authorUrl": "https://github.com/lukejanicke",
+	"fundingUrl": [
+		"https://github.com/sponsors/lukejanicke",
+		"https://buymeacoffee.com/lukejanicke"
+	],
+	"isDesktopOnly": false
+}
