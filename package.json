@@ -1,6 +1,6 @@
 {
 	"name": "quick-wrapper",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Quickly wrap selected text with customisable tags using keyboard shortcuts.",
 	"main": "main.js",
 	"scripts": {
