@@ -1,5 +1,15 @@
 import { App, Editor, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 
+// Extend the App type to include the commands property
+declare module 'obsidian' {
+    interface App {
+        commands: {
+            removeCommand(id: string): void;
+            commands: { [key: string]: any };
+        };
+    }
+}
+
 interface QuickTag {
     id: number;
     name: string;
@@ -42,11 +52,6 @@ export default class QuickWrapperPlugin extends Plugin {
     }
 
     private registerCommands() {
-        // Note: TypeScript errors here can be safely ignored.
-        // The `commands` property exists on Obsidian's App instance at runtime,
-        // but is not included in the TypeScript type definitions.
-        // This is a common pattern in Obsidian plugin development.
-
         // Remove existing commands - note that commands will persist until plugin
         // is deactivated or Obsidian is restarted
         Object.keys(this.app.commands.commands)
